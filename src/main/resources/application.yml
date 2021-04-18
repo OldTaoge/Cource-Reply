@@ -1,0 +1,58 @@
+server:
+  max-http-header-size: 1MB
+
+service:
+  upload: true
+
+spring:
+  application:
+    name: jun-sen-api
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      auto-commit: true
+      connection-test-query: SELECT 1
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      maximum-pool-size: 10
+      minimum-idle: 5
+      pool-name: MyHikariCP
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://mysql.lan:3306/edu-jun-sen?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: Cource-Reply
+    password: Cource-Reply
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
+logging:
+  level:
+    org:
+      keycloak: INFO
+    space:
+      oldtaoge:
+        edu:
+          junsen: INFO
+
+keycloak:
+  realm: master
+  resource: jun-sen-api
+  credentials:
+    secret: secret
+  auth-server-url: https://openid.oldtaoge.space/oauth2
+  principal-attribute: preferred_username
+  public-client: false
+  bearer-only: true
+  cors: true
+  use-resource-role-mappings: true
+  ssl-required: external
+  security-constraints:
+    - authRoles:
+        - j-s-admin
+      securityCollections:
+        - patterns:
+            - /upload/*
